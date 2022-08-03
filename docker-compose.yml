@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  # Nodejs
+  result:
+    build: ./result
+    command: node app.js
+    volumes:
+      - ./result:/app/result
+    container_name: "nodejs"
+    ports:
+      - "8080"
+    networks:
+      - devops-network
+  # Python
+  vote:
+    build: ./vote
+    command: python app.py
+    volumes:
+      - ./vote:/app/vote
+    container_name: "python"
+    networks:
+      - devops-network
+  # Dotnet
+  worker:
+    build: ./worker
+
+    container_name: "dotnet"
+    networks:
+      - devops-network
+  # Postgres DB
+  postgres:
+    container_name: db
+    image: postgres
+    environment:
+      POSTGRES_DB: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - /data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - devops-network
+    restart: unless-stopped
+
+  # Redis
+  redis:
+    image: redis
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      - TZ=Europe/Istanbul
+    networks:
+      - devops-network
+networks:
+  devops-network:
