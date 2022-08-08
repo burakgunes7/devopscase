@@ -4,7 +4,7 @@ services:
   # Nodejs
   result:
     build: ./result
-    command: node app.js
+    command: node server.js
     volumes:
       - ./result:/app/result
     container_name: "nodejs"
