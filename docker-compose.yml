@@ -10,6 +10,9 @@ services:
     container_name: "nodejs"
     ports:
       - "8080"
+    mem_limit: 300m
+    mem_reservation: 100m
+    cpus: 0.1
     networks:
       - devops-network
   # Python
@@ -19,13 +22,18 @@ services:
     volumes:
       - ./vote:/app/vote
     container_name: "python"
+    mem_limit: 300m
+    mem_reservation: 100m
+    cpus: 0.1
     networks:
       - devops-network
   # Dotnet
   worker:
     build: ./worker
-
     container_name: "dotnet"
+    mem_limit: 300m
+    mem_reservation: 100m
+    cpus: 0.1
     networks:
       - devops-network
   # Postgres DB
@@ -41,18 +49,21 @@ services:
       - /data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    mem_limit: 300m
+    mem_reservation: 100m
+    cpus: 0.1
     networks:
       - devops-network
     restart: unless-stopped
-
   # Redis
   redis:
     image: redis
     container_name: redis
     ports:
       - "6379:6379"
-    environment:
-      - TZ=Europe/Istanbul
+    mem_limit: 300m
+    mem_reservation: 100m
+    cpus: 0.1
     networks:
       - devops-network
 networks:
